@@ -17,7 +17,7 @@ export function Game({socket}: {socket: Socket}) {
     [null, null, null],
   ]);
 
- const {playerSymbol, setPlayerSymbol, isPlayerTurn, setPlayerTurn, isGameStarted, setIsGameStarted} = useContext(GameContext)
+ const {playerSymbol, setPlayerSymbol, isPlayerTurn, setPlayerTurn, isGameStarted, setIsGameStarted, setInRoom} = useContext(GameContext)
  const [gameStatus, setGameStatus] = useState<"running" | "win" | "draw">("running");
 
  const checkGameState = (matrix: IPlayMatrix) => {
@@ -67,22 +67,43 @@ export function Game({socket}: {socket: Socket}) {
   return [false, false];
 };
 
-  const updateGameMatrix = (column: number, row: number, symbol: "x" | "o") => {
-    // Logic for updating game matrix
-    const newMatrix = [...matrix]
-    if(newMatrix[row][column] === null || newMatrix[row][column] === 'null'){
-        newMatrix[row][column] = symbol;
-        
-        setMatrix(newMatrix)
+  
+const updateGameMatrix = (column: number, row: number, symbol: "x" | "o") => {
+  // Logic for updating game matrix
+  const newMatrix = [...matrix];
+  if (newMatrix[row][column] === null) {
+    newMatrix[row][column] = symbol;
+    setMatrix(newMatrix);
+
+    if (socket) {
+      gameService.updateGame(socket, newMatrix).then(() => {
+        const [currentPlayerWon, otherPlayerWon] = checkGameState(newMatrix);
+        if (currentPlayerWon && otherPlayerWon) {
+          const msg = 'The game is a TIE!';
+          gameService.onWin(socket, msg);
+          alert(msg);
+          setInRoom(false)
+          window.location.reload(); // Refresh the browser
+        } else if (currentPlayerWon && !otherPlayerWon) {
+          const msg = 'You Won!';
+          gameService.onWin(socket, msg);
+          alert(msg);
+          setInRoom(false)
+          window.location.reload(); // Refresh the browser
+        } else if (!currentPlayerWon && otherPlayerWon) {
+          const msg = 'You lost!';
+          gameService.onWin(socket, msg);
+          alert(msg);
+          setInRoom(false)
+          window.location.reload(); // Refresh the browser
+        }
+
         // After making a move, set the player turn to false
         setPlayerTurn(false);
-        handleGameWin(newMatrix, symbol);
+      });
     }
-    if(socket) {
-      gameService.updateGame(socket, newMatrix)
-    }
-    
-  };
+  }
+};
 
   const handleGameUpdate = () => {
     // Logic for handling game update
@@ -90,6 +111,7 @@ export function Game({socket}: {socket: Socket}) {
     console.log('socket>>>>>>>>>>', socket)
     gameService.onGameUpdate(socket, ({matrix})=>{
       setMatrix(matrix)
+      checkGameState(matrix)
       // After receiving an update from the server, set the player turn to true
       setPlayerTurn(true);
     })
@@ -109,12 +131,14 @@ export function Game({socket}: {socket: Socket}) {
     }
   };
   const handleGameWin = () => {
-    if (socketService.socket)
-      gameService.onGameWin(socketService.socket, (message) => {
+    if (socket) {
+      gameService.onGameWinNotif(socket, (message) => {
         console.log("Here", message);
         setPlayerTurn(false);
         alert(message);
       });
+    }
+      
   };
   useEffect(() => {
     handleGameUpdate();
@@ -122,6 +146,8 @@ export function Game({socket}: {socket: Socket}) {
     handleGameWin()
 
   }, []);
+
+  
 
   return (
     <div className="game-container">
