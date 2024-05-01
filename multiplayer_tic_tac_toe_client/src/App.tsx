@@ -26,7 +26,7 @@ const contextValue: IGameContextProps = {
       color: 'darkgray'
      }}>Welcom to Tic_Tac_Toe</h1>
      {!isInRoom && <GameInput  socket={socket}/>}
-     {isInRoom && < Box/>}
+     {isInRoom && < Box socket={socket}/>}
     </div>
     </GameContext.Provider>
    
