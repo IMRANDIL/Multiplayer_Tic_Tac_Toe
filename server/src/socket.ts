@@ -1,5 +1,6 @@
-import { useSocketServer } from "socket-controllers";
+import {SocketControllers} from 'socket-controllers'
 import { Server } from "socket.io";
+import Container from 'typedi';
 
 export default (httpServer) => {
   const io = new Server(httpServer, {
@@ -8,11 +9,12 @@ export default (httpServer) => {
     },
   });
 
-  // io.on("connection", (socket) => {
-
-  // });
-
-  useSocketServer(io, { controllers: [__dirname + "/api/controllers/*.ts"] });
+  new SocketControllers({
+    port: 9001,
+    container: Container,
+    controllers: [__dirname + "/api/controllers/*.ts"],
+    io: io
+  });
 
   return io;
 };
