@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Game.css"; // Import CSS file for styling
+import GameContext from "../context/gameContext";
 
 export type IPlayMatrix = Array<Array<string | null>>;
 export interface IStartGame {
@@ -10,11 +11,11 @@ export interface IStartGame {
 export function Game() {
   const [matrix, setMatrix] = useState<IPlayMatrix>([
     [null, null, null],
-    [null, '0', null],
+    [null, null, null],
     [null, null, null],
   ]);
 
- 
+ const {playerSymbol, setPlayerSymbol} = useContext(GameContext)
 
   const checkGameState = (matrix: IPlayMatrix) => {
     // Logic for checking game state
@@ -23,7 +24,11 @@ export function Game() {
 
   const updateGameMatrix = (column: number, row: number, symbol: "x" | "o") => {
     // Logic for updating game matrix
-    // ...
+    const newMatrix = [...matrix]
+    if(newMatrix[row][column] === null || newMatrix[row][column] === 'null'){
+        newMatrix[row][column] = symbol;
+    }
+    setMatrix(newMatrix)
   };
 
   const handleGameUpdate = () => {
@@ -65,7 +70,7 @@ export function Game() {
                   rowIdx < 2 ? "border-bottom" : ""} ${
                   rowIdx > 0 ? "border-top" : ""}`}
                 onClick={() =>
-                  {}
+                  updateGameMatrix(columnIdx, rowIdx, playerSymbol)
                 }
               >
                 {column && column !== "null" ? (

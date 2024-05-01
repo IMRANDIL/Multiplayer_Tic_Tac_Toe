@@ -11,10 +11,12 @@ import Box from './components/Box'
 function App() {
 const socket = useSocket("http://localhost:9000")
 const [isInRoom, setInRoom] = useState(false)
-
+const [playerSymbol, setPlayerSymbol] = useState<"x" | "o">("x")
 const contextValue: IGameContextProps = {
   isInRoom,
-  setInRoom
+  setInRoom,
+  playerSymbol,
+  setPlayerSymbol
 };
 
   return (
