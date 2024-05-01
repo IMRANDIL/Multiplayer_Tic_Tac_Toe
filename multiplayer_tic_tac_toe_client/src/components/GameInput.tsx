@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect, useRef } from "react";
 
 interface IGameInputProps {
   onJoinRoom: (roomName: string) => void;
@@ -7,6 +6,12 @@ interface IGameInputProps {
 
 const GameInput: React.FC<IGameInputProps> = ({ onJoinRoom }) => {
   const [roomName, setRoomName] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // Focus the input element when the component mounts
+    inputRef.current?.focus();
+  }, []); // Empty dependency array ensures this effect runs only once after mounting
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomName(e.target.value);
@@ -25,10 +30,12 @@ const GameInput: React.FC<IGameInputProps> = ({ onJoinRoom }) => {
           Enter Game Room Name:
         </label>
         <input
+          ref={inputRef} // Ref to focus the input element
           className="input"
           type="text"
           id="roomName"
           value={roomName}
+          placeholder="Enter Room Id"
           onChange={handleChange}
           required
         />
