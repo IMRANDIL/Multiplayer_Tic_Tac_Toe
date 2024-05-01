@@ -17,7 +17,7 @@ export function Game({socket}: {socket: Socket}) {
     [null, null, null],
   ]);
 
- const {playerSymbol, setPlayerSymbol} = useContext(GameContext)
+ const {playerSymbol, setPlayerSymbol, isPlayerTurn, setPlayerTurn} = useContext(GameContext)
 
   const checkGameState = (matrix: IPlayMatrix) => {
     // Logic for checking game state
@@ -29,7 +29,10 @@ export function Game({socket}: {socket: Socket}) {
     const newMatrix = [...matrix]
     if(newMatrix[row][column] === null || newMatrix[row][column] === 'null'){
         newMatrix[row][column] = symbol;
+        
         setMatrix(newMatrix)
+        // After making a move, set the player turn to false
+        setPlayerTurn(false);
     }
     if(socket) {
       gameService.updateGame(socket, newMatrix)
@@ -43,6 +46,8 @@ export function Game({socket}: {socket: Socket}) {
     console.log('socket>>>>>>>>>>', socket)
     gameService.onGameUpdate(socket, ({matrix})=>{
       setMatrix(matrix)
+      // After receiving an update from the server, set the player turn to true
+      setPlayerTurn(true);
     })
    }
   };
@@ -65,6 +70,7 @@ export function Game({socket}: {socket: Socket}) {
 
   return (
     <div className="game-container">
+      {(!isPlayerTurn) && <div className="play-stopper" />}
       { matrix.map((row, rowIdx) => {
         return (
           <div className="row-container" key={`row-${rowIdx}`}>
@@ -77,7 +83,8 @@ export function Game({socket}: {socket: Socket}) {
                   rowIdx < 2 ? "border-bottom" : ""} ${
                   rowIdx > 0 ? "border-top" : ""}`}
                 onClick={() =>
-                  updateGameMatrix(columnIdx, rowIdx, playerSymbol)
+                  // Only allow the player to make a move if it's their turn
+                  isPlayerTurn && updateGameMatrix(columnIdx, rowIdx, playerSymbol)
                 }
               >
                 {column && column !== "null" ? (
