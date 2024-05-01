@@ -6,6 +6,7 @@ import './App.css'
 import GameInput from './components/GameInput'
 import useSocket from './customhooks/useSocket'
 import GameContext, {IGameContextProps} from './context/gameContext'
+import Box from './components/Box'
 
 function App() {
 const socket = useSocket("http://localhost:9000")
@@ -22,8 +23,8 @@ const contextValue: IGameContextProps = {
      <h1 style={{
       color: 'darkgray'
      }}>Welcom to Tic_Tac_Toe</h1>
-     <GameInput  socket={socket}/>
-     {/* <Box/> */}
+     {!isInRoom && <GameInput  socket={socket}/>}
+     {isInRoom && < Box/>}
     </div>
     </GameContext.Provider>
    

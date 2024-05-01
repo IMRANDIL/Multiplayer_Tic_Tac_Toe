@@ -1,8 +1,11 @@
+import { Game } from "./Game"
 
 
 const Box = () => {
   return (
-    <div className='boxContainer'>Box</div>
+    <div className='boxContainer'>
+      <Game/>
+    </div>
   )
 }
 
