@@ -10,5 +10,8 @@ export class GameController {
     @OnConnect()
     public onConnection(@ConnectedSocket() socket: Socket, @SocketIO() io: Server) {
         console.log(`New socket connected: ${socket.id}`)
+        socket.on('custom_event', (data)=>{
+            console.log('data came from client', data)
+        })
     }
 }

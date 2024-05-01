@@ -21,6 +21,7 @@ export class RoomController {
             })
         } else {
             await  socket.join(msg.roomId) //join the room now
+            socket.emit("room_joined")
         }
 
     }
