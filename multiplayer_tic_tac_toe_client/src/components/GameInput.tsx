@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import GameContext from "../context/gameContext";
+import { Socket } from "socket.io-client";
+import gameService from "../services/gameService";
 
 interface IGameInputProps {
-  onJoinRoom: (roomName: string) => void;
+  socket: Socket | null;
 }
 
-const GameInput: React.FC<IGameInputProps> = ({ onJoinRoom }) => {
+const GameInput: React.FC<IGameInputProps> = ({ socket }) => {
   const [roomName, setRoomName] = useState("");
+  const [isJoining, setIsJoining] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null);
   const {isInRoom, setInRoom} = useContext(GameContext)
 
-  
+
   useEffect(() => {
     // Focus the input element when the component mounts
     inputRef.current?.focus();
@@ -20,9 +23,22 @@ const GameInput: React.FC<IGameInputProps> = ({ onJoinRoom }) => {
     setRoomName(e.target.value);
   };
 
+  const joinRoom = async ()=>{
+    if(!roomName || roomName.trim() === "" || !socket) return;
+    setIsJoining(true)
+    const joined = await gameService.joinGameRoom(socket, roomName).catch((err)=> alert(err));
+    if(joined) {
+      setInRoom(true)
+      setIsJoining(false)
+    }else {
+      setInRoom(false)
+      setIsJoining(false)
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onJoinRoom(roomName);
+    joinRoom()
     setRoomName(""); // Clear input after submission
   };
 

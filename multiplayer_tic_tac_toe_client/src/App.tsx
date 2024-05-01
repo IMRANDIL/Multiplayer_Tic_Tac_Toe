@@ -11,8 +11,6 @@ function App() {
 const socket = useSocket("http://localhost:9000")
 const [isInRoom, setInRoom] = useState(false)
 
-
-
 const contextValue: IGameContextProps = {
   isInRoom,
   setInRoom
@@ -24,7 +22,7 @@ const contextValue: IGameContextProps = {
      <h1 style={{
       color: 'darkgray'
      }}>Welcom to Tic_Tac_Toe</h1>
-     <GameInput onJoinRoom={()=>{}}/>
+     <GameInput  socket={socket}/>
      {/* <Box/> */}
     </div>
     </GameContext.Provider>
