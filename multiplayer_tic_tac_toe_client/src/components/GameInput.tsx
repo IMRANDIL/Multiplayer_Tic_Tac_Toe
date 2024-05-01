@@ -42,6 +42,7 @@ const GameInput: React.FC<IGameInputProps> = ({ socket }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     joinRoom()
+    setIsJoining(false)
     setRoomName(""); // Clear input after submission
   };
 
