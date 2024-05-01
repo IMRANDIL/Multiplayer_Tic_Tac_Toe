@@ -26,7 +26,10 @@ const GameInput: React.FC<IGameInputProps> = ({ socket }) => {
   const joinRoom = async ()=>{
     if(!roomName || roomName.trim() === "" || !socket) return;
     setIsJoining(true)
-    const joined = await gameService.joinGameRoom(socket, roomName).catch((err)=> alert(err));
+    const joined = await gameService.joinGameRoom(socket, roomName).catch((err)=> {
+      setIsJoining(false)
+      alert(err)
+    });
     if(joined) {
       setInRoom(true)
       setIsJoining(false)
@@ -58,8 +61,8 @@ const GameInput: React.FC<IGameInputProps> = ({ socket }) => {
           onChange={handleChange}
           required
         />
-        <button className="button" type="submit">
-          Join Room
+        <button className="button" type="submit" disabled={isJoining}>
+          {isJoining ? "Joining..." : "Join Room"}
         </button>
       </form>
     </div>
