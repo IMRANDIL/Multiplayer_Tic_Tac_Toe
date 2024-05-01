@@ -1,17 +1,24 @@
-import { ConnectedSocket, OnConnect, SocketController, SocketIO } from "socket-controllers";
+import { ConnectedSocket, MessageBody, OnMessage, SocketController, SocketIO } from "socket-controllers";
 import { Server, Socket } from "socket.io";
 import { Service } from "typedi";
 
 
 
 @SocketController()
-@Service() // Only if you are using typedi
+@Service()
 export class GameController {
-    @OnConnect()
-    public onConnection(@ConnectedSocket() socket: Socket, @SocketIO() io: Server) {
-        console.log(`New socket connected: ${socket.id}`)
-        socket.on('custom_event', (data)=>{
-            console.log('data came from client', data)
-        })
+
+    private getSocketGameRoom(socket: Socket): string {
+        const soccketRooms = Array.from(socket.rooms.values()).filter((r)=> r !== socket.id)
+        const gameRoom = soccketRooms && soccketRooms[0];
+
+        return gameRoom;
+    }
+
+    @OnMessage("update_game")
+    public async updateGame(@SocketIO() io: Server, @ConnectedSocket() socket: Socket, @MessageBody() msg: any){
+        const gameRoom = this.getSocketGameRoom(socket)
+        socket.to(gameRoom).emit("on_game_update", msg)
+
     }
 }
