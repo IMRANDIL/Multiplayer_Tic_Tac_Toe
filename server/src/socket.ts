@@ -10,7 +10,7 @@ export default (httpServer) => {
   });
 
   new SocketControllers({
-    port: 9001,
+    port: 9000,
     container: Container,
     controllers: [__dirname + "/api/controllers/*.ts"],
     io: io

@@ -1,11 +1,14 @@
-import { OnConnect, SocketController } from "socket-controllers";
+import { ConnectedSocket, OnConnect, SocketController, SocketIO } from "socket-controllers";
+import { Server, Socket } from "socket.io";
+import { Service } from "typedi";
 
 
 
 @SocketController()
-class GameController {
+@Service() // Only if you are using typedi
+export class GameController {
     @OnConnect()
-    public onConnection() {
-
+    public onConnection(@ConnectedSocket() socket: Socket, @SocketIO() io: Server) {
+        console.log(`New socket connected: ${socket.id}`)
     }
 }
