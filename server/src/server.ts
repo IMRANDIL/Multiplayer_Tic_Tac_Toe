@@ -8,7 +8,7 @@ import "reflect-metadata";
 import app from "./app";
 var debug = require("debug")("socketio-server:server");
 import * as http from "http";
-// import socketServer from "./socket";
+import socketServer from "./socket";
 
 /**
  * Get port from environment and store in Express.
@@ -31,7 +31,7 @@ server.listen(port);
 server.on("error", onError);
 server.on("listening", onListening);
 
-// const io = socketServer(server);
+const io = socketServer(server);
 
 /**
  * Normalize a port into a number, string, or false.
