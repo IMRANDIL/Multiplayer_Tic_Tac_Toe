@@ -1,7 +1,7 @@
 
 
 import './App.css'
-import Box from './components/Box'
+// import Box from './components/Box'
 import GameInput from './components/GameInput'
 import useSocket from './customhooks/useSocket'
 
@@ -15,7 +15,7 @@ const socket = useSocket("http://localhost:9000")
       color: 'darkgray'
      }}>Welcom to Tic_Tac_Toe</h1>
      <GameInput onJoinRoom={()=>{}}/>
-     <Box/>
+     {/* <Box/> */}
     </div>
   )
 }
