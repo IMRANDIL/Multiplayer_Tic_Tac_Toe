@@ -1,8 +1,11 @@
-import { SocketController } from "socket-controllers";
+import { OnConnect, SocketController } from "socket-controllers";
 
 
 
 @SocketController()
 class GameController {
-    
+    @OnConnect()
+    public onConnection() {
+
+    }
 }
