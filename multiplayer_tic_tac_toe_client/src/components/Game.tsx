@@ -17,7 +17,7 @@ export function Game({socket}: {socket: Socket}) {
     [null, null, null],
   ]);
 
- const {playerSymbol, setPlayerSymbol, isPlayerTurn, setPlayerTurn} = useContext(GameContext)
+ const {playerSymbol, setPlayerSymbol, isPlayerTurn, setPlayerTurn, isGameStarted, setIsGameStarted} = useContext(GameContext)
 
   const checkGameState = (matrix: IPlayMatrix) => {
     // Logic for checking game state
@@ -56,6 +56,7 @@ export function Game({socket}: {socket: Socket}) {
     // Logic for handling game start
     if(socket) {
       gameService.onStartGame(socket, (options)=>{
+        setIsGameStarted(true)
         setPlayerSymbol(options.symbol)
         if(options.start) {
           setPlayerTurn(true)
@@ -77,7 +78,10 @@ export function Game({socket}: {socket: Socket}) {
 
   return (
     <div className="game-container">
-      {(!isPlayerTurn) && <div className="play-stopper" />}
+      {!isGameStarted && (
+        <h2>Waiting for Other Player to Join to Start the Game!</h2>
+      )}
+      {(!isGameStarted || !isPlayerTurn) && <div className="play-stopper" />}
       { matrix.map((row, rowIdx) => {
         return (
           <div className="row-container" key={`row-${rowIdx}`}>

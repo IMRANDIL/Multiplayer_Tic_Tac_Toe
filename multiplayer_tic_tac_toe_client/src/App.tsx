@@ -13,13 +13,16 @@ const socket = useSocket("http://localhost:9000")
 const [isInRoom, setInRoom] = useState(false)
 const [playerSymbol, setPlayerSymbol] = useState<"x" | "o">("x");
 const [isPlayerTurn, setPlayerTurn] = useState(false);
+const [isGameStarted, setIsGameStarted] = useState(false)
 const contextValue: IGameContextProps = {
   isInRoom,
   setInRoom,
   playerSymbol,
   setPlayerSymbol,
   isPlayerTurn,
-  setPlayerTurn
+  setPlayerTurn,
+  isGameStarted,
+  setIsGameStarted
 };
 
   return (
