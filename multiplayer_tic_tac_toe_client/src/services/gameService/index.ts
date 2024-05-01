@@ -1,5 +1,5 @@
 import { Socket } from "socket.io-client";
-import { IPlayMatrix } from "../../components/Game";
+import { IPlayMatrix, IStartGame } from "../../components/Game";
 
 
 class GameSocketService {
@@ -20,6 +20,10 @@ class GameSocketService {
 
     public async onGameUpdate(socket: Socket, listener: (matrix: IPlayMatrix)=> void) {
         socket.on('on_game_update', (matrix)=>listener(matrix))
+    }
+
+    public async onStartGame(socket: Socket, listener: (option: IStartGame)=> void){
+        socket.on('start_game', listener)
     }
 }
 

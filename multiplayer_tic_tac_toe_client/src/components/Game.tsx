@@ -54,7 +54,14 @@ export function Game({socket}: {socket: Socket}) {
 
   const handleGameStart = () => {
     // Logic for handling game start
-    // ...
+    if(socket) {
+      gameService.onStartGame(socket, (options)=>{
+        setPlayerSymbol(options.symbol)
+        if(options.start) {
+          setPlayerTurn(true)
+        }
+      })
+    }
   };
 
   const handleGameWin = () => {
