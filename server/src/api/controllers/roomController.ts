@@ -11,7 +11,7 @@ export class RoomController {
     public async joinGame(@SocketIO() io: Server, @ConnectedSocket() socket: Socket, @MessageBody() msg: any){
         console.log("New user joined the room", socket.id, msg);
 
-        const ConnectedSockets = io.sockets.adapter.rooms.get(msg.roomdId) //will tell us the connected socket in that particular room...
+        const ConnectedSockets = io.sockets.adapter.rooms.get(msg.roomId) //will tell us the connected socket in that particular room...
 
         const socketRooms = Array.from(socket.rooms.values()).filter((r)=> r !== socket.id)
 

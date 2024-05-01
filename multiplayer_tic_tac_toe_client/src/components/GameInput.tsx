@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import GameContext from "../context/gameContext";
 
 interface IGameInputProps {
   onJoinRoom: (roomName: string) => void;
@@ -7,7 +8,9 @@ interface IGameInputProps {
 const GameInput: React.FC<IGameInputProps> = ({ onJoinRoom }) => {
   const [roomName, setRoomName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const {isInRoom, setInRoom} = useContext(GameContext)
 
+  
   useEffect(() => {
     // Focus the input element when the component mounts
     inputRef.current?.focus();

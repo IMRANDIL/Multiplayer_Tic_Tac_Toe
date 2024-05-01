@@ -9,11 +9,9 @@ import GameContext, {IGameContextProps} from './context/gameContext'
 
 function App() {
 const socket = useSocket("http://localhost:9000")
-const [isInRoom, setIsInRoom] = useState(false)
+const [isInRoom, setInRoom] = useState(false)
 
-const setInRoom = (value: boolean) => {
-  setIsInRoom(value);
-};
+
 
 const contextValue: IGameContextProps = {
   isInRoom,
