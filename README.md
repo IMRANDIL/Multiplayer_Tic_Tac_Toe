@@ -23,4 +23,4 @@ To set up the project, follow these steps:
 1. Clone the repository to your local machine:
 
    ```bash
-   git clone <repository-url>
+   git clone [repo](https://github.com/IMRANDIL/Multiplayer_Tic_Tac_Toe.git)
