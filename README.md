@@ -6,7 +6,6 @@ This is a simple Tic-Tac-Toe game built with React and Socket.io for real-time m
 
 - [Features](#features)
 - [Setup](#setup)
-- [Usage](#usage)
 
 ## Features
 
@@ -23,4 +22,4 @@ To set up the project, follow these steps:
 1. Clone the repository to your local machine:
 
    ```bash
-   git clone (https://github.com/IMRANDIL/Multiplayer_Tic_Tac_Toe.git)
+   git clone https://github.com/IMRANDIL/Multiplayer_Tic_Tac_Toe.git
